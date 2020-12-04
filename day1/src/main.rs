@@ -17,8 +17,17 @@ fn main() -> std::io::Result<()> {
     let val = combine_vec(&l1,2);
     for tuple in val {
         if tuple[0] + tuple[1] == 2020 {
-            println!("Matching tuple: {:?}", tuple);
-            println!("Solution: {}", tuple[0] * tuple[1]);
+            println!("Matching tuple pt. 1: {:?}", tuple);
+            println!("Solution pt. 1: {}", tuple[0] * tuple[1]);
+        }
+    }
+
+    // part 2
+    let val2 = combine_vec(&l1,3);
+    for tuple in val2 {
+        if tuple[0] + tuple[1] + tuple[2] == 2020 {
+            println!("Matching tuple pt. 2: {:?}", tuple);
+            println!("Solution pt. 2: {}", tuple[0] * tuple[1] * tuple[2]);
         }
     }
 
