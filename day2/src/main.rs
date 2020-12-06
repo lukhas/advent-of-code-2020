@@ -1,5 +1,3 @@
-#![feature(bool_to_option)]
-
 use std::fs::File;
 use std::io::prelude::*;
 use regex::Regex;
