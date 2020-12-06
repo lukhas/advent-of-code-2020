@@ -19,22 +19,16 @@ fn main() -> std::io::Result<()> {
     
     for line in contents.split('\n') {
         for cap in re.captures_iter(line) {
-            let lower:i8 = cap[1].parse().expect("Parse failure");
-            let upper:i8 = cap[2].parse().expect("Parse failure");
+            let lower:usize = cap[1].parse().expect("Parse failure");
+            let upper:usize = cap[2].parse().expect("Parse failure");
             // it's actually just one character, trust me
             let letter:char = cap[3].chars().nth(0).unwrap();
             let pw:String = String::from(&cap[4]);
             // println!("Lower: {} Upper: {} Letter: {}", lower, upper, letter);
 
-            let count = pw.chars().fold(0, | count, c| -> i8 {
-                if c == letter {
-                    count + 1
-                } else {
-                    count
-                }
-            });
-            //println!("Letter {} found {} times in {}", letter, count, pw);
-            if (lower <= count) && (count <= upper) {
+            let letter_count:usize = pw.chars().filter(|c| c == &letter ).count();
+            //println!("Letter {} found {} times in {}", letter, letter_count, pw);
+            if (lower <= letter_count) && (letter_count <= upper) {
                 valid_count = valid_count + 1;
             }
         }
