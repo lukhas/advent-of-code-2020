@@ -1,7 +1,6 @@
+
 use std::fs::File;
 use std::io::prelude::*;
-
-use combination::combine::*;
 
 fn main() -> std::io::Result<()> {
     // file must be in the directory from where we call the executable
@@ -12,24 +11,23 @@ fn main() -> std::io::Result<()> {
     contents = contents.trim().to_string();
 
     // make a u32 Vector out of the iter of strings
-    let l1: Vec<u32> = contents.split('\n').map(|x| x.parse().unwrap()).collect();
+    let number_list: Vec<u32> = contents.split('\n').map(|x| x.parse().expect("Input error")).collect();
 
-    let val = combine_vec(&l1,2);
-    for tuple in val {
-        if tuple[0] + tuple[1] == 2020 {
-            println!("Matching tuple pt. 1: {:?}", tuple);
-            println!("Solution pt. 1: {}", tuple[0] * tuple[1]);
+    for a in &number_list {
+        for b in &number_list {
+            //println!("a,b: {} - {}",a, b);
+            if a + b == 2020 {
+                println!("Matching tuple pt. 1: {} {}", a, b);
+                println!("Solution pt. 1: {}", a * b);
+            }
+            for c in &number_list {
+                if a + b + c == 2020 {
+                    println!("Matching tuple pt. 2: {} {} {}", a, b, c);
+                    println!("Solution pt. 2: {}", a * b * c);
+                }
+            }
         }
     }
-
-    // part 2
-    let val2 = combine_vec(&l1,3);
-    for tuple in val2 {
-        if tuple[0] + tuple[1] + tuple[2] == 2020 {
-            println!("Matching tuple pt. 2: {:?}", tuple);
-            println!("Solution pt. 2: {}", tuple[0] * tuple[1] * tuple[2]);
-        }
-    }
-
+    
     Ok(())
 }
