@@ -21,22 +21,15 @@ fn main() -> std::io::Result<()> {
 }
 
 fn toboggan_walk(contents: &String, right_step: usize, down_step: usize) -> usize {
-    let mut x = 0;
-    let mut count = 0;
-
     let mut iter = contents.split('\n').step_by(down_step);
     iter.next();
-    
-    for l in iter {
-        // println!("X: {}, Line: {}", x, l);
-        // println!("Char: {}", l.chars().nth(x).unwrap());
-        x = (x + right_step) % l.len();
 
-        // unchecked unwrap is fine here cause we modulo'd x by the line length
+    iter.fold( (0, 0) , |mut t, l| {
+        let x = (t.0 + right_step) % l.len();
+        t = (x, t.1);
         if l.chars().nth(x).unwrap() == '#' {
-            count+=1;
+            t = (x, t.1 + 1);
         }
-    }
-    
-    count
+        t
+    }).1
 }
