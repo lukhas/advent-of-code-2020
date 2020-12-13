@@ -10,6 +10,13 @@ fn main() -> std::io::Result<()> {
     contents = contents.trim().to_string();
 
     println!("Tree count pt1: {}", toboggan_walk(&contents, 3, 1));
+    println!("Result pt2: {}",
+             toboggan_walk(&contents, 1, 1) *
+             toboggan_walk(&contents, 3, 1) *
+             toboggan_walk(&contents, 5, 1) *
+             toboggan_walk(&contents, 7, 1) *
+             toboggan_walk(&contents, 1, 2)
+    );
     Ok(())
 }
 
