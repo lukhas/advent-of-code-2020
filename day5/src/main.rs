@@ -10,18 +10,11 @@ fn main() -> std::io::Result<()> {
     contents = contents.trim().to_string();
 
     // assume input is properly formatted
-    let high = contents.split('\n').fold(0,|high, line| {
-        let id = binary_to_row(line.get(0..7).unwrap()) * 8 + binary_to_column(line.get(7..10).unwrap());
-        //println!("id: {}", id);
-        if id > high {
-            id }
-        else {
-            high
-        }
-    });
+    let mut ids = contents.split('\n').map(|line| binary_to_row(line.get(0..7).unwrap()) * 8 + binary_to_column(line.get(7..10).unwrap())).collect::<Vec<_>>();
+    ids.sort();
 
-    println!("Higest ID: {}", high);
-    
+    println!("Highest ID: {}", ids.last().unwrap());
+    println!("Free seat: {}", find_gap(ids));
     Ok(())
 }
 
@@ -46,4 +39,17 @@ fn binary_search(s: &str, mut lower: u32, mut upper: u32, l_code: char, u_code: 
         }
     }
     lower
+}
+
+fn find_gap(list: Vec<u32>) -> u32 {
+    list.windows(2).fold(0, |seat, elem | {
+        let a = elem.get(0).unwrap();
+        let b = elem.get(1).unwrap();
+
+        if *b - 1 != *a {
+            *b - 1
+        } else {
+            seat
+        }
+    })
 }
