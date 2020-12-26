@@ -9,6 +9,7 @@ fn main() -> std::io::Result<()> {
     file.read_to_string(&mut contents)?;
     contents = contents.trim().to_string();
 
+    // assume input is properly formatted
     let high = contents.split('\n').fold(0,|high, line| {
         let id = binary_to_row(line.get(0..7).unwrap()) * 8 + binary_to_column(line.get(7..10).unwrap());
         //println!("id: {}", id);
@@ -17,7 +18,6 @@ fn main() -> std::io::Result<()> {
         else {
             high
         }
-            
     });
 
     println!("Higest ID: {}", high);
