@@ -14,32 +14,44 @@ fn main() -> std::io::Result<()> {
     file.read_to_string(&mut contents)?;
     contents = contents.trim().to_string();
 
-    let mut total_count   = 0;
-    let mut total_count_2 = 0;
-    let re = Regex::new(r"[a-z]").unwrap();
+    let mut total_anyone   = 0;
+    let mut total_everyone = 0;
     
     for group in contents.split("\n\n") {
-        let people_count:u32 = (group.matches("\n").count() + 1).try_into().unwrap();
-        //println!("People_Count: {}",people_count);
+        let g = build_group(group);
+        total_anyone += g.answers.len();
 
-        let mut answers: HashMap<&str,u32> = HashMap::new();
-        re.find_iter(group).for_each(|answer| {
-            let count = answers.entry(answer.as_str()).or_insert(0);
-            *count += 1;
-        });
-
-        for (_, v) in &answers {
-            if *v == people_count {
-                total_count_2 += 1;
+        for (_, answer_count) in g.answers {
+            if answer_count == g.persons {
+                total_everyone += 1;
             }
         }
-
-        //println!("Map: {:?}\n",answers);
-        total_count += answers.len();
-        //println!("Group count: {}\n",answers.len());
     }
 
-    println!("Total count pt.1: {}",total_count);
-    println!("Total count pt.2: {}",total_count_2);
+    println!("Total count anyone   (pt.1): {}",total_anyone);
+    println!("Total count everyone (pt.2): {}",total_everyone);
     Ok(())
+}
+
+fn count_persons(group: &str) -> u32 {
+    (group.matches("\n").count() + 1).try_into().unwrap()
+}
+
+struct Group<'a> {
+    persons: u32,
+    answers: HashMap<&'a str,u32>,
+}
+
+fn build_group(group: &str) -> Group {
+    let mut answers: HashMap<&str,u32> = HashMap::new();
+    let re = Regex::new(r"[a-z]").unwrap();
+    re.find_iter(group).for_each(|answer| {
+        let count = answers.entry(answer.as_str()).or_insert(0);
+        *count += 1;
+    });
+    
+    Group {
+        persons: count_persons(group),
+        answers: answers,
+    }
 }
