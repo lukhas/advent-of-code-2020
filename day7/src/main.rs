@@ -36,8 +36,23 @@ fn main() -> std::io::Result<()> {
     }
 
     println!("Count pt. 1: {}", bags.iter().filter(|(k, _) | find_gold(&bags,k)).count());
+    println!("Count pt. 2: {}", count_contenants(&bags, "shiny gold") - 1);
     
     Ok(())
+}
+
+fn count_contenants(bags: &HashMap<String, HashMap<String, usize>>, key: &str) -> usize {
+    //println!("counting {}",key);
+    match &bags.get(key) {
+        None => 0,
+        Some(h) =>
+        {
+            //println!("  {:?}",h);
+            h.iter().fold(1, | found, (elem, qty) | {
+                found + qty * count_contenants(&bags, elem)
+            })
+        }
+    }
 }
 
 fn find_gold(bags: &HashMap<String, HashMap<String, usize>>, key: &str) -> bool {
