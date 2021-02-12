@@ -3,6 +3,8 @@ use std::io::prelude::*;
 
 use ndarray::{Array2, Axis};
 
+type Board = Array2<char>;
+
 fn main() -> std::io::Result<()> {
     // file must be in the directory from where we call the executable
     let mut file = File::open("day11_input")?;
@@ -14,7 +16,7 @@ fn main() -> std::io::Result<()> {
     let height = contents.matches('\n').count();
     let width = contents.split('\n').next().unwrap().chars().count();
 
-    let mut initial_board = Array2::<char>::default((height, width));
+    let mut initial_board = Board::default((height, width));
 
     let mut col = 0;
     let mut row = 0;
@@ -80,10 +82,10 @@ fn main() -> std::io::Result<()> {
 }
 
 fn next_round(
-    src: &Array2<char>,
-    dest: &mut Array2<char>,
+    src: &Board,
+    dest: &mut Board,
     occupancy_limit: usize,
-    neighbour_fn: &dyn Fn(&Array2<char>, &[usize]) -> Vec<char>,
+    neighbour_fn: &dyn Fn(&Board, &[usize]) -> Vec<char>,
 ) -> bool {
     let mut col = 0;
     let mut row = 0;
@@ -122,7 +124,7 @@ fn next_round(
     changed
 }
 
-fn get_immediate_neighbours(board: &Array2<char>, coords: &[usize]) -> Vec<char> {
+fn get_immediate_neighbours(board: &Board, coords: &[usize]) -> Vec<char> {
     let mut neighbours: Vec<char> = Vec::new();
     let row = coords[0];
     let col = coords[1];
@@ -164,7 +166,7 @@ fn get_immediate_neighbours(board: &Array2<char>, coords: &[usize]) -> Vec<char>
     neighbours
 }
 
-fn get_seat_neighbours(board: &Array2<char>, coords: &[usize]) -> Vec<char> {
+fn get_seat_neighbours(board: &Board, coords: &[usize]) -> Vec<char> {
     let mut neighbours: Vec<char> = Vec::new();
 
     // top left diag
@@ -204,7 +206,7 @@ fn get_seat_neighbours(board: &Array2<char>, coords: &[usize]) -> Vec<char> {
 }
 
 fn get_nearest_seat(
-    board: &Array2<char>,
+    board: &Board,
     coords: &[usize],
     v_direction: isize,
     h_direction: isize,
@@ -233,7 +235,7 @@ fn get_nearest_seat(
 }
 
 #[allow(dead_code)]
-fn print_board(board: &Array2<char>) {
+fn print_board(board: &Board) {
     for row in board.axis_iter(Axis(0)) {
         for col in row.axis_iter(Axis(0)) {
             print!("{}", col);
