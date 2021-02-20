@@ -31,6 +31,41 @@ fn main() -> std::io::Result<()> {
         "Result Pt. 1: {}",
         (closest_departure.0 - ts) * closest_departure.1
     );
+
+    // overwrite earlier variable, I like the name
+    // we're working with modulos, so 'x' is now 1
+    let bus_lines: Vec<u64> = f[1].split(',').map(|x| x.parse().unwrap_or(1)).collect();
+    let mut sieve = bus_lines.clone();
+
+    let mut ts: u64 = 0;
+    let mut step = 1;
+
+    loop {
+        ts += step;
+
+        let mut base_ts = ts;
+        let mut modulos: Vec<u64> = Vec::new();
+        for l in &bus_lines {
+            let modulo = base_ts % *l;
+            modulos.push(modulo);
+            base_ts += 1;
+
+            if modulo == 0 && sieve.contains(&l) {
+                //println!("{} - {:?}", ts, modulos);
+                step *= *l;
+                sieve.retain(|x| x != l);
+            }
+        }
+        //println!("{} - {:?}", ts, modulos);
+        if modulos.iter().sum::<u64>() == 0 {
+            break;
+        }
+        if ts == u64::MAX {
+            println!("Not found");
+            break;
+        }
+    }
+    println!("Timestamp Pt. 2: {}", ts);
     Ok(())
 }
 
