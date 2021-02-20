@@ -60,6 +60,7 @@ fn main() -> std::io::Result<()> {
         if modulos.iter().sum::<u64>() == 0 {
             break;
         }
+        // Failsafe, you never know
         if ts == u64::MAX {
             println!("Not found");
             break;
