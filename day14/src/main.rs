@@ -19,13 +19,13 @@ fn main() -> std::io::Result<()> {
 
     lazy_static! {
         static ref RE_MASK: Regex = Regex::new(r"^mask\s+=\s+(.*)$").unwrap();
-        static ref RE_MEM: Regex = Regex::new(r"^mem\[(\d)+\]\s+=\s+(\d+)$").unwrap();
+        static ref RE_MEM: Regex = Regex::new(r"^mem\[(\d+)\]\s+=\s+(\d+)$").unwrap();
     }
 
     for line in contents.split('\n') {
         if let Some(x) = RE_MASK.captures(line) {
             mask = x.get(1).unwrap().as_str().to_string();
-            println!("mask: {}", mask);
+            //println!("mask: {}", mask);
         }
 
         if let Some(x) = RE_MEM.captures(line) {
@@ -34,16 +34,13 @@ fn main() -> std::io::Result<()> {
             //println!("addr: {} - val: {}", addr, val);
 
             dec_to_bin(val, &mut bin);
-            println!("binary for {:10} is {}", val, bin);
+            //println!("binary for {:10} is {}", val, bin);
 
             apply_mask(&mask, &mut bin);
-            println!("result for {:10} is {} ({})", val, bin, bin_to_dec(&bin));
+            //println!("result for {:10} is {} ({})", val, bin, bin_to_dec(&bin));
 
-            // mem[addr] = bin_to_dec(&bin);
             mem.insert(addr, bin_to_dec(&bin));
         }
-
-        //*bin = "".to_string();
     }
     let pt1: usize = mem.values().sum();
     println!("Pt. 1 result: {}", pt1);
