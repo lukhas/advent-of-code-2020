@@ -32,8 +32,6 @@ fn main() -> std::io::Result<()> {
         static ref RE_TICKET: Regex = Regex::new(r"(?m)^\d+,.*\d$").unwrap();
     }
 
-    //let fields_str = contents.split("\n\n").next().unwrap();
-
     let mut fields: Vec<Field> = Vec::new();
 
     // first part: allowed ranges in fields
@@ -71,8 +69,7 @@ fn main() -> std::io::Result<()> {
             //println!("My ticket: {:?}", my_ticket);
         } else {
             // looking at other tickets
-            // Pt1 wants to find the ones that do not comply with
-            // requirements
+            // Pt1 wants to find the ones that do not comply with requirements
             let ticket = line_to_ticket(&cap[0]);
 
             let mut incremented = false;
@@ -101,7 +98,6 @@ fn main() -> std::io::Result<()> {
 
     //println!("Valid tickets: {:?}", valid_tickets);
 
-    //let mut matching: Vec<(usize, &Field)> = Vec::new();
     let mut matched = BTreeMap::new();
 
     for f in fields.iter() {
