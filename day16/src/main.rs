@@ -4,7 +4,6 @@ use std::io::prelude::*;
 use lazy_static::lazy_static;
 use regex::Regex;
 
-// use std::collections::HashMap;
 use std::collections::BTreeMap;
 
 // always (lower, upper)
@@ -69,8 +68,6 @@ fn main() -> std::io::Result<()> {
         // the first ticket is our ticket
         if my_ticket.is_empty() {
             my_ticket = line_to_ticket(&cap[0]);
-            // nope for now
-            //valid_tickets.push(my_ticket.clone());
             //println!("My ticket: {:?}", my_ticket);
         } else {
             // looking at other tickets
@@ -102,8 +99,7 @@ fn main() -> std::io::Result<()> {
 
     println!("Pt1 error rate: {}", pt1_error_rate);
 
-    println!();
-    println!("Valid tickets: {:?}", valid_tickets);
+    //println!("Valid tickets: {:?}", valid_tickets);
 
     //let mut matching: Vec<(usize, &Field)> = Vec::new();
     let mut matched = BTreeMap::new();
@@ -116,20 +112,13 @@ fn main() -> std::io::Result<()> {
             // println!("    {:?}", vertical_values);
 
             if values_fit_boundaries(&vertical_values, &f.boundaries) {
-                // println!("      => matching");
-                //matching.push((idx, &f));
-
                 let h = matched.entry(&f.field_name).or_insert_with(BTreeMap::new);
                 h.insert(idx, true);
-                //h.push(idx);
             }
         }
     }
 
-    //let mut final_match = Vec::new();
-    //final_match.push(0);
-    println!();
-    println!("{:?}", matched);
+    //println!("{:?}", matched);
 
     let mut final_pass: BTreeMap<&String, BTreeMap<usize, bool>> = BTreeMap::new();
 
@@ -154,15 +143,15 @@ fn main() -> std::io::Result<()> {
         }
         matched = copy;
     }
-    println!();
-    println!("{:?}", final_pass);
-    println!("{:?}", matched);
+    // println!();
+    // println!("{:?}", final_pass);
+    // println!("{:?}", matched);
 
     // Find out what's on my ticket
     let mut pt2_result = 1;
     for (k, v) in final_pass {
         let field = v.keys().next().unwrap();
-        println!("{} is {}", k, my_ticket[*field]);
+        // println!("{} is {}", k, my_ticket[*field]);
 
         if k.starts_with("departure") {
             pt2_result *= my_ticket[*field];
