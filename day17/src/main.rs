@@ -11,7 +11,7 @@ struct InfiniteCube {
 }
 
 // assume this is enough for infinity
-static OFFSET: isize = 15;
+static OFFSET: isize = 14;
 
 use itertools::Itertools;
 
@@ -118,7 +118,7 @@ fn count_neighbours(universe: &InfiniteCube, coords: &[isize]) -> usize {
         .multi_cartesian_product()
     {
         // don't check yourself
-        if i == vec![0; universe.dimensions as usize] {
+        if i.iter().filter(|&x| *x != 0).count() == 0 {
             continue;
         }
 
